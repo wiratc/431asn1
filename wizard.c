@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <time.h>
+#include <stdlib.h>
+
+#include <unistd.h>
 
 #include "input.h"
+
+#define FALSE 0
+#define TRUE (!FALSE)
 
 extern char shop[MAX_SHOP][MAX_NAME];
 extern char wizard[MAX_WIZARD][MAX_NAME];
@@ -21,16 +27,57 @@ extern int shop_patron[MAX_SHOP];
 void *wizard_print(int wizard_id){
 	time_t time_now;
 
-	printf("tid %u: ", pthread_self());
-	printf("second %d: ", clock());
+	printf("tid %u: ", (unsigned int)pthread_self());
+	printf("second %ld: ", clock() / CLOCKS_PER_SEC);
 	printf("%s ", wizard[wizard_id]);
 	printf("(%s) ", wizard_type[wizard_id] == AUROR ? "Auror" : "DeathEater");
 	
 }
 
+
+int wizard_check_patron(int wizard_id, int shop_id){
+	int type = wizard_type[wizard_id];
+	int patron = shop_patron[shop_id];
+
+	if(type == AUROR){
+		if(patron >= 0){
+			return TRUE;
+		}	
+	}else{
+		if(patron <= 0){
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+int wizard_leave_shop(int wizard_id, int shop_id){
+	int type = wizard_type[wizard_id];
+	int patron = shop_patron[shop_id];
+
+	if(type == AUROR){
+		return patron - 1;
+	}else{
+		return patron + 1;
+	}
+}
+
+int wizard_enter_shop(int wizard_id, int shop_id){
+	int type = wizard_type[wizard_id];
+	int patron = shop_patron[shop_id];
+
+	if(type == AUROR){
+		return patron + 1;
+	}else{
+		return patron - 1;
+	}
+}
+
 wizard_reserve(int shop_id){
 	
 }
+
 
 void wizard_init(void *id){
 	int i;
