@@ -40,7 +40,7 @@ void wizard_print(int wizard_id, int shop_id, char *msg){
 	*/
 
 	pthread_mutex_lock(&print_mutex);
-	printf("tid %u: ", (unsigned int)pthread_self());
+	printf("%u: ", (unsigned int)pthread_self());
 	printf("second %d: ", (int)difftime(time_now, time_start));
 	printf("%s ", wizard[wizard_id]);
 	printf("(%s) ", wizard_type[wizard_id] == AUROR ? "Auror" : "DeathEater");
