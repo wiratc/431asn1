@@ -61,11 +61,11 @@ void input_init(){
 	}
 
 	while(fgets(line_buf, MAX_LINE, fp) != NULL){
-		//printf("%s", line_buf);
 		if(line_buf[0] == '\n'){
 			continue;
 		}
-		
+		printf("%s", line_buf);
+	
 		num_line++;
 		
 		new_line = strchr(line_buf, '\n');
