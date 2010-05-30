@@ -34,6 +34,11 @@ void wizard_print(int wizard_id, int shop_id, char *msg){
 	time_t time_now;
 	time(&time_now);
 	
+	/*
+	a mutex is needed to prevent threads printing outputs same time.
+	otherwise the output may be not readable.
+	*/
+
 	pthread_mutex_lock(&print_mutex);
 	printf("tid %u: ", (unsigned int)pthread_self());
 	printf("second %d: ", (int)difftime(time_now, time_start));
@@ -44,7 +49,7 @@ void wizard_print(int wizard_id, int shop_id, char *msg){
 	
 	/*	
 	for(i = 0; i < num_shop; i++){
-		printf("%10s\t%2d\n", shop[i], shop_patron[i]);
+		printf("%20s\t%4d\n", shop[i], shop_patron[i]);
 	}	
 	*/
 
@@ -122,10 +127,12 @@ void wizard_init(void *id){
 	time_t time_now;
 	time_t time_reserve;	
 	
+	//trying to reserve the first shop
 	reserving_shop = wizard_shop[wizard_id][0];
 	last_shop = reserving_shop;
 	while(TRUE){
 		pthread_mutex_lock(&shop_mutex[reserving_shop]);
+		
 		if(wizard_check_shop(wizard_id, reserving_shop)){
 			
 			wizard_reserve_shop(wizard_id, reserving_shop);
@@ -139,6 +146,7 @@ void wizard_init(void *id){
 	
 	sleep(1);
 	
+	//trying to reserve subsequent shops
 	for(i = 1; i < wizard_num_shop[wizard_id]; i++){
 		last_shop = wizard_shop[wizard_id][i - 1];
 		reserving_shop = wizard_shop[wizard_id][i];
@@ -146,10 +154,15 @@ void wizard_init(void *id){
 
 		while(TRUE){
 			
+			//calculate time since the first attempt to lock a mutex
 			time(&time_now);
 			diff = difftime(time_now, time_reserve);
 			
+			//cannot enter the next shop in 3 seconds
 			if(diff >= 3 && !left_shop){
+				
+				//leave the current shop and try to reserve the next shop
+				
 				left_shop = TRUE;
 				
 				pthread_mutex_lock(&shop_mutex[last_shop]);
@@ -163,8 +176,11 @@ void wizard_init(void *id){
 
 			//pthread_mutex_lock(&shop_mutex[reserving_shop]);
 			
-			if(pthread_mutex_trylock(&shop_mutex[reserving_shop]) != 0) continue;			
+			if(pthread_mutex_trylock(&shop_mutex[reserving_shop]) != 0){
+				continue;			
+			}
 
+			//check if the next shop is occupied by the same type or is not occupied
 			if(wizard_check_shop(wizard_id, reserving_shop)){
 				wizard_reserve_shop(wizard_id, reserving_shop);
 				
@@ -174,7 +190,7 @@ void wizard_init(void *id){
 					wizard_leave_shop(wizard_id, last_shop);
 					sprintf(print_buf,
 					"leaves the %s shop to apparate to the next destination.",
-					shop[reserving_shop]);
+					shop[last_shop]);
 					wizard_print(wizard_id, reserving_shop, print_buf);
 
 					pthread_mutex_unlock(&shop_mutex[last_shop]);
