@@ -46,7 +46,7 @@ void input_print_info(){
 	
 }
 
-void input_init(){
+void input_init(char* file_name){
 	
 	int i = 0;
 	char line_buf[MAX_LINE];
@@ -54,7 +54,7 @@ void input_init(){
 	char *wizard_ptr;
 	char *new_line;
 	char token[] = " ";
-	FILE *fp = fopen("input.txt" ,"r");
+	FILE *fp = fopen(file_name ,"r");
 	
 	if(fp == NULL){
 		//error

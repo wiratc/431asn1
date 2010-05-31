@@ -37,9 +37,9 @@ void init(){
 }
 
 
-int main(){
+int main(int argc, char* argv[]){
 	time(&time_start);
-	input_init();
+	input_init(argv[1]);
 	//input_print_info();
 	init();
 	return 0;
