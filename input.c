@@ -13,7 +13,7 @@ int wizard_num_shop[MAX_WIZARD];
 int num_line;
 int num_shop;
 
-
+//find a shop index in the array by shop name
 int input_shop_index(const char *shop_name){
 	int i = 0;
 	
@@ -30,6 +30,7 @@ int input_shop_index(const char *shop_name){
 
 }
 
+//for debugging
 void input_print_info(){
 	int i, j;
 	
@@ -46,6 +47,7 @@ void input_print_info(){
 	
 }
 
+//parsing in putdile
 void input_init(char* file_name){
 	
 	int i = 0;
@@ -60,6 +62,7 @@ void input_init(char* file_name){
 		//error
 	}
 
+	//reading line by line
 	while(fgets(line_buf, MAX_LINE, fp) != NULL){
 		if(line_buf[0] == '\n'){
 			continue;
@@ -68,17 +71,23 @@ void input_init(char* file_name){
 	
 		num_line++;
 		
+		//remove '\n' from the end of line
 		new_line = strchr(line_buf, '\n');
 		*new_line = '\0';
 		
+		//split by " "
 		str_buf = strtok(line_buf, token);
+		//wizard name
 		strcpy(wizard[num_line -1], str_buf);
 
 
 		//printf("%s\n", str_buf);
+		
+		//wizard type
 		str_buf = strtok(NULL, token);
 		//printf("%s\n", str_buf);
-	
+		
+		//converting type to int
 		if(strcmp("DeathEater", str_buf) == 0){
 			wizard_type[num_line - 1] = DEATH;
 			//str_buf = strtok(NULL, token);
@@ -86,7 +95,7 @@ void input_init(char* file_name){
 			wizard_type[num_line - 1] = AUROR;
 		}
 
-				
+		//start getting shop name		
 		str_buf = strtok(NULL, token);
 
 		i = 0;

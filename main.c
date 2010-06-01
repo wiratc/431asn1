@@ -20,6 +20,7 @@ pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
 int shop_patron[MAX_SHOP];
 
 void init(){
+	//initialize mutexes and creating threads
 	int i;
 	for(i = 0; i < num_shop; i++){
 		pthread_mutex_init(&shop_mutex[i], NULL);
@@ -31,6 +32,7 @@ void init(){
 		pthread_create(&wizard_thread[i], NULL, wizard_init, (void *)wizard_id); 	
 	}
 
+	//join all threads
 	for(i = 0; i < num_line; i++){
 		pthread_join(wizard_thread[i], NULL);
 	}

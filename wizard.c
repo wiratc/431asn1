@@ -29,6 +29,7 @@ extern pthread_mutex_t print_mutex;
 
 extern time_t time_start;
 
+//printing output
 void wizard_print(int wizard_id, int shop_id, char *msg){
 	int i;
 	time_t time_now;
@@ -126,6 +127,14 @@ void wizard_init(void *id){
 	char print_buf[MAX_PRINT];
 	time_t time_now;
 	time_t time_reserve;	
+	
+	/*
+	general procedure
+	if shop_patron[shop_index] > 0
+		there are abs(shop_patron[shop_index]) aurors in the shop.
+	else
+		there are abs(shop_patron[shop_index]) death eaters in the shop
+	*/	
 	
 	//trying to reserve the first shop
 	reserving_shop = wizard_shop[wizard_id][0];

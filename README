@@ -1,0 +1,24 @@
+To Compile:
+$ make
+output:
+gcc -c input.c
+gcc -c wizard.c
+gcc -lpthread main.c input.o wizard.o
+
+To Run:
+$ ./a.out input.txt
+output with sample input file:
+Tonks Auror Olivander's Cheese
+Snape DeathEater Cheese Olivander's
+3069176688: second 0: Snape (DeathEater) makes a reservation at Cheese shop.
+3069176688: second 0: Snape (DeathEater) enters the Cheese shop.
+3077569392: second 0: Tonks (Auror) makes a reservation at Olivander's shop.
+3077569392: second 0: Tonks (Auror) enters the Olivander's shop.
+3069176688: second 4: Snape (DeathEater) is bored talking to the salesperson. Snape leaves the Cheese shop without a reservation for the next shop to go for a walk.
+3077569392: second 4: Tonks (Auror) is bored talking to the salesperson. Tonks leaves the Olivander's shop without a reservation for the next shop to go for a walk.
+3077569392: second 4: Tonks (Auror) makes a reservation at Cheese shop.
+3077569392: second 4: Tonks (Auror) enters the Cheese shop.
+3069176688: second 4: Snape (DeathEater) makes a reservation at Olivander's shop.
+3069176688: second 4: Snape (DeathEater) enters the Olivander's shop.
+3077569392: second 5: Tonks (Auror) is done with shopping. Tonks leaves the Cheese shop.
+3069176688: second 5: Snape (DeathEater) is done with shopping. Snape leaves the Olivander's shop.
